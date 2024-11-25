@@ -1,0 +1,72 @@
+/* General reset */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background: #121212; /* Solid dark background */
+    color: white;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Center the container */
+  .container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  /* Signup box styling */
+  .signup-box {
+    background: #1a1a1a; /* Slightly lighter dark background for contrast */
+    border: none; /* Removed border for a clean look */
+    border-radius: 15px;
+    padding: 40px;
+    width: 300px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.8); /* Deep shadow for a floating effect */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .signup-box:hover {
+    transform: scale(1.03); /* Slight scale-up effect on hover */
+    box-shadow: 0px 15px 35px rgba(0, 0, 0, 1);
+  }
+  
+  h1 {
+    margin: 0 0 10px;
+    font-size: 28px;
+    color: #1db954; /* Spotify green for the title */
+  }
+  
+  p {
+    margin: 0 0 20px;
+    font-size: 16px;
+    color: #ccc; /* Softer text color for contrast */
+  }
+  
+  /* Button styling */
+  .btn {
+    background-color: #1db954;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0px 5px 15px rgba(29, 185, 84, 0.5); /* Glow effect */
+  }
+  
+  .btn:hover {
+    background-color: #1ed760;
+    box-shadow: 0px 10px 20px rgba(29, 185, 84, 0.8); /* Stronger glow */
+    transform: translateY(-2px); /* Subtle lift */
+  }
+  
+  .btn:active {
+    transform: translateY(1px); /* Pressed button effect */
+    background-color: #14893d;
+  }
+  
