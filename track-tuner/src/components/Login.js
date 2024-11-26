@@ -1,26 +1,34 @@
-import React, {useState, useEffect} from 'react'
-import Spotify from '../Spotify.js'
-import './Login.css'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from "react";
+import Spotify from "../Spotify.js";
+import "./Login.css";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-    let navigate = useNavigate()
-    let [userData, setUserData] = useState("")
+    let navigate = useNavigate();
+    const [userData, setUserData] = useState("");
 
     useEffect(() => {
-        if (userData){
-            navigate("/home")
+        const token = Spotify.getAccessToken();
+        if (token) {
+            Spotify.getUserId()
+                .then((data) => {
+                    setUserData(data);
+                    navigate("/home");
+                })
+                .catch((error) => console.error("Error fetching user data:", error));
         }
-    })
+    }, [navigate]);
 
     const signup = async () => {
         try {
             const newUserData = await Spotify.getUserId();
-            setUserData(newUserData)
+            setUserData(newUserData);
+            navigate("/home");
         } catch (error) {
-            console.error('Error fetching user data:', error);
+            console.error("Error fetching user data:", error);
         }
-    }
+    };
+
     return (
         <div className="container">
             <div className="signup">
@@ -31,7 +39,7 @@ const Login = () => {
                 </button>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Login
+export default Login;

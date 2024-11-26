@@ -4,23 +4,29 @@ const redirectUri = encodeURIComponent("http://localhost:3000/")
 const scopes = encodeURIComponent("user-read-private user-read-email playlist-modify-public")
 let accessToken
 const Spotify = {
-    getAccessToken : () => {
-        accessToken = window.location.hash
-        .substring(1)
-        .split('&')
-        .reduce((initial, item) => {
-            let parts = item.split('=')
-            initial[parts[0]] = decodeURIComponent(parts[1])
-            return initial
-        }, {}).access_token
-        if (accessToken) {            
-            localStorage.setItem('accessToken', JSON.stringify(accessToken))
-            return accessToken
+    getAccessToken: () => {
+        if (accessToken) {
+            return accessToken;
         }
-        else {
-            const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=token`
-            window.location = accessUrl
+        const hash = window.location.hash
+            .substring(1)
+            .split("&")
+            .reduce((initial, item) => {
+                let parts = item.split("=");
+                initial[parts[0]] = decodeURIComponent(parts[1]);
+                return initial;
+            }, {});
+
+        accessToken = hash.access_token;
+
+        if (accessToken) {
+            window.history.pushState("", document.title, window.location.pathname);
+            localStorage.setItem("accessToken", JSON.stringify(accessToken));
+            return accessToken;
         }
+
+        const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes}&response_type=token`;
+        window.location = accessUrl;
     },
     getUserId: () => {
         accessToken = Spotify.getAccessToken()
@@ -62,6 +68,29 @@ const Spotify = {
                     uri: track.uri
                 }))
             })
+        }
+    },
+    getUserPlaylists: async () => {
+        accessToken = Spotify.getAccessToken();
+        if (accessToken) {
+            const headers = { Authorization: `Bearer ${accessToken}` };
+            try {
+                // First, get the user ID
+                const userId = await Spotify.getUserId();
+                if (!userId) {
+                    throw new Error("User ID not found.");
+                }
+
+                // Fetch the playlists for the user
+                const response = await fetch(`https://api.spotify.com/v1/users/${userId.user_id}/playlists`, { headers });
+                const data = await response.json();
+
+                // Return the playlist data
+                return data.items || [];
+            } catch (error) {
+                console.error("Error fetching playlists:", error);
+                return [];
+            }
         }
     }
 }

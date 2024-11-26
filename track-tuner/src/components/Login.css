@@ -6,10 +6,7 @@ body, html {
     background: #121212; /* Solid dark background */
     color: white;
     height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+}
   
   /* Center the container */
   .container {
