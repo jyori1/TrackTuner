@@ -25,9 +25,60 @@ const Playlists = () => {
             </Typography>
             {playlists.length > 0 ? (
                 <Grid container spacing={2}>
+                    {/* Custom card for creating a new playlist */}
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <Card
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                height: "100%",
+                                border: "2px dashed #aaa",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <CardMedia
+                                sx={{
+                                    width: "60%",
+                                    height: "auto",
+                                }}
+                                component="img"
+                                image="https://via.placeholder.com/150?text=+" // Placeholder for "Create" icon or custom image
+                                alt="Create New Playlist"
+                            />
+                            <CardContent>
+                                <Typography
+                                    variant="body1"
+                                    sx={{ fontWeight: 500, textAlign: "center" }}
+                                >
+                                    Create New Playlist
+                                </Typography>
+                            </CardContent>
+                            <CardActions>
+                                <Button
+                                    size="small"
+                                    color="primary"
+                                    onClick={() => {
+                                        console.log("Create new playlist clicked"); // Replace with your handler
+                                    }}
+                                >
+                                    Create
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+
+                    {/* Loop through the playlists */}
                     {playlists.map((playlist) => (
                         <Grid item xs={12} sm={6} md={3} lg={2} key={playlist.id}>
-                            <Card sx={{ display: "flex", flexDirection: "column", alignItems: "center", height: "100%" }}>
+                            <Card
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    height: "100%",
+                                }}
+                            >
                                 <CardMedia
                                     sx={{
                                         width: "100%",
@@ -39,7 +90,10 @@ const Playlists = () => {
                                     title={playlist.name}
                                 />
                                 <CardContent sx={{ textAlign: "center", padding: "10px" }}>
-                                    <Typography variant="body1" sx={{ fontWeight: 500, wordWrap: "break-word" }}>
+                                    <Typography
+                                        variant="body1"
+                                        sx={{ fontWeight: 500, wordWrap: "break-word" }}
+                                    >
                                         {playlist.name}
                                     </Typography>
                                 </CardContent>
