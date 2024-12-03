@@ -1,15 +1,28 @@
 import React, { useState } from 'react'
 import Button from '@mui/material/Button';
 import { FormControl, InputLabel, TextField, Typography, Box, Modal, FormControlLabel, FormLabel, Switch } from '@mui/material';
+import Spotify from '../Spotify';
+import Playlists from './Playlists';
 
-
-const CreatePlaylistModal = ({ isOpen, onClose }) => {
+const CreatePlaylistModal = ({ isOpen, onClose, fetchPlaylists }) => {
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [isPrivate, setIsPrivate] = useState(false);
 
-  const handleSubmit = () => {
-    console.log(name, description, isPrivate);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (name.trim().length === 0) {
+      alert("Must provide a name")
+      return;
+    }
+    try {
+      await Spotify.createPlaylist({name, description, isPrivate});
+      fetchPlaylists()
+      
+    } catch (error) {
+      console.error("Error creating playlist:", error);
+    }
+    onClose()
   };
 
 

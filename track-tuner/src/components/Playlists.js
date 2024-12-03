@@ -7,16 +7,16 @@ const Playlists = () => {
     const [playlists, setPlaylists] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false)
 
-    useEffect(() => {
-        const fetchPlaylists = async () => {
-            try {
-                const data = await Spotify.getUserPlaylists();
-                setPlaylists(data);
-            } catch (error) {
-                console.error("Error fetching playlists:", error);
-            }
-        };
+    const fetchPlaylists = async () => {
+        try {
+            const data = await Spotify.getUserPlaylists();
+            setPlaylists(data);
+        } catch (error) {
+            console.error("Error fetching playlists:", error);
+        }
+    };
 
+    useEffect(() => {
         fetchPlaylists();
     }, []);
 
@@ -120,7 +120,7 @@ const Playlists = () => {
                     <Typography>Loading playlists...</Typography>
                 )}
             </Box>
-            {isModalVisible && (<CreatePlaylistModal isOpen={isModalVisible} onClose={() => setIsModalVisible(false)} />)}
+            {isModalVisible && (<CreatePlaylistModal isOpen={isModalVisible} onClose={() => setIsModalVisible(false)} fetchPlaylists={fetchPlaylists} />)}
         </div>
     );
 };

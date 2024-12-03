@@ -1,7 +1,7 @@
 import clientId from "./secrets.js"
 
 const redirectUri = encodeURIComponent("http://localhost:3000/")
-const scopes = encodeURIComponent("user-read-private user-read-email playlist-modify-public")
+const scopes = encodeURIComponent("user-read-private user-read-email playlist-modify-public playlist-modify-private")
 let accessToken
 const Spotify = {
     getAccessToken: () => {
@@ -92,6 +92,48 @@ const Spotify = {
                 return [];
             }
         }
+    },
+    createPlaylist: async (fields) => {
+        accessToken = Spotify.getAccessToken();
+        if (accessToken){
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+            };
+            const { name, description, isPrivate } = fields;
+
+            try{
+                const userId = await Spotify.getUserId();
+                if (!userId) {
+                    throw new Error("User ID not found.");
+                }
+                const creating = await fetch(`https://api.spotify.com/v1/users/${userId.user_id}/playlists`, {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify({
+                        name, 
+                        description: description || "", 
+                        public: !isPrivate, 
+                    }),
+                });
+
+                if (!creating.ok){
+                    throw new Error ("Error making playlist")
+                }
+                const data = await creating.json()
+                console.log(data)
+                return data
+
+            } catch(e){
+                console.error("Error creating playlist:", e);
+                return;
+            }
+
+
+
+
+        }
+
     }
 }
 
