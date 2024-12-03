@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import Button from '@mui/material/Button';
 import { FormControl, InputLabel, TextField, Typography, Box, Modal, FormControlLabel, FormLabel, Switch } from '@mui/material';
 import Spotify from '../Spotify';
-import Playlists from './Playlists';
 
 const CreatePlaylistModal = ({ isOpen, onClose, fetchPlaylists }) => {
   const [name, setName] = useState("")

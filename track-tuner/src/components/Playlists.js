@@ -47,7 +47,7 @@ const Playlists = () => {
                                         height: "auto",
                                     }}
                                     component="img"
-                                    image="https://via.placeholder.com/150?text=+" // Placeholder for "Create" icon or custom image
+                                    image="/create.jpg" 
                                     alt="Create New Playlist"
                                 />
                                 <CardContent>
