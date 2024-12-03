@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import Login from './components/Login.js';
 import Home from './components/Home.js';
+import PlaylistDetails from './components/PlaylistDetails.js';
 
 const darkTheme = createTheme({
     palette: {
@@ -19,6 +20,7 @@ function App() {
                     <Routes>
                         <Route path="/" element={<Login />} />
                         <Route path="/home" element={<Home />} />
+                        <Route path="/playlist/:playlistId" element={<PlaylistDetails />} />
                     </Routes>
                 </Router>
             </div>

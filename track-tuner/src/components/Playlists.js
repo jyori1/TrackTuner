@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Spotify from "../Spotify.js";
 import { Card, CardActions, CardContent, CardMedia, Typography, Button, Grid, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Playlists = () => {
     const [playlists, setPlaylists] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPlaylists = async () => {
@@ -98,6 +100,13 @@ const Playlists = () => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions sx={{ justifyContent: "center", padding: "10px" }}>
+                                    <Button
+                                        size="small"
+                                        color="primary"
+                                        onClick={() => navigate(`/playlist/${playlist.id}`)} // Navigate programmatically
+                                    >
+                                        View Playlist
+                                    </Button>
                                     <Button
                                         size="small"
                                         color="primary"

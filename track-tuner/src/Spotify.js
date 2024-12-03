@@ -92,6 +92,20 @@ const Spotify = {
                 return [];
             }
         }
+    },
+    getPlaylist: async (playlistId) => {
+        accessToken = Spotify.getAccessToken();
+        if (accessToken) {
+            const headers = { Authorization: `Bearer ${accessToken}` };
+            try {
+                const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, { headers });
+                const data = await response.json();
+
+                return data;
+            } catch (error) {
+                console.error("Error fetching playlist details:", error);
+            }
+        }
     }
 }
 
