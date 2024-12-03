@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Spotify from "../Spotify.js";
 import { useParams } from "react-router-dom";
-import { Card, CardActions, CardContent, CardMedia, Typography, Button, Grid, Box } from "@mui/material";
+import {
+    List,
+    ListItem,
+    ListItemAvatar,
+    Avatar,
+    ListItemText,
+    IconButton,
+    Typography,
+    Box,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const PlaylistDetails = () => {
     const { playlistId } = useParams();
@@ -20,6 +30,10 @@ const PlaylistDetails = () => {
         fetchPlaylist();
     }, [playlistId]);
 
+    const handleDelete = (trackId) => {
+        console.log(`Track with ID ${trackId} deleted.`);
+    };
+
     return (
         <Box sx={{ padding: "20px", minHeight: "100vh", overflowY: "auto" }}>
             {playlist ? (
@@ -31,74 +45,63 @@ const PlaylistDetails = () => {
                         {playlist.description || "No description available."}
                     </Typography>
 
-                    {playlist.images?.[0]?.url && (
-                        <Box sx={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-                            <CardMedia
-                                component="img"
-                                image={playlist.images[0].url}
-                                alt={playlist.name}
-                                sx={{
-                                    width: "50%",
-                                    height: "auto",
-                                    borderRadius: "8px",
-                                }}
-                            />
-                        </Box>
-                    )}
-
-                    <Typography variant="h6" gutterBottom>
+                    <Typography variant="h6" gutterBottom sx={{ marginTop: "20px" }}>
                         Tracks:
                     </Typography>
-                    <Grid container spacing={2}>
-                        {playlist.tracks.items.map((item) => (
-                            <Grid item xs={12} sm={6} md={4} lg={3} key={item.track.id}>
-                                <Card
+
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <List
+                            sx={{
+                                maxWidth: "800px",
+                                width: "100%",
+                                bgcolor: "background.paper",
+                                borderRadius: "8px",
+                                padding: "10px",
+                            }}
+                        >
+                            {playlist.tracks.items.map((item) => (
+                                <ListItem
+                                    key={item.track.id}
+                                    secondaryAction={
+                                        <IconButton
+                                            edge="end"
+                                            aria-label="delete"
+                                            onClick={() => handleDelete(item.track.id)}
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    }
                                     sx={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        height: "100%",
+                                        marginBottom: "10px",
+                                        borderBottom: "1px solid #444"
                                     }}
                                 >
-                                    <CardMedia
-                                        component="img"
-                                        image={item.track.album.images?.[0]?.url || "https://via.placeholder.com/150"}
-                                        alt={item.track.name}
-                                        sx={{
-                                            width: "100%",
-                                            height: "auto",
-                                            objectFit: "contain",
-                                        }}
+                                    <ListItemAvatar>
+                                        <Avatar
+                                            src={
+                                                item.track.album.images?.[0]?.url ||
+                                                "https://via.placeholder.com/150"
+                                            }
+                                            variant="square"
+                                            sx={{ width: 56, height: 56 }}
+                                        />
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        primary={item.track.name}
+                                        secondary={item.track.artists
+                                            .map((artist) => artist.name)
+                                            .join(", ")}
+                                        sx={{ marginLeft: "16px" }}
                                     />
-                                    <CardContent sx={{ textAlign: "center", padding: "10px" }}>
-                                        <Typography
-                                            variant="body1"
-                                            sx={{ fontWeight: 500, wordWrap: "break-word" }}
-                                        >
-                                            {item.track.name}
-                                        </Typography>
-                                        <Typography
-                                            variant="body2"
-                                            color="text.secondary"
-                                            sx={{ fontWeight: 400 }}
-                                        >
-                                            {item.track.artists.map((artist) => artist.name).join(", ")}
-                                        </Typography>
-                                    </CardContent>
-                                    <CardActions sx={{ justifyContent: "center", padding: "10px" }}>
-                                        <Button
-                                            size="small"
-                                            color="primary"
-                                            href={item.track.external_urls.spotify}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            Play on Spotify
-                                        </Button>
-                                    </CardActions>
-                                </Card>
-                            </Grid>
-                        ))}
-                    </Grid>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Box>
                 </>
             ) : (
                 <Typography variant="body1">Loading...</Typography>
