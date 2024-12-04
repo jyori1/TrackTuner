@@ -17,11 +17,16 @@ jobs:
       with:
         node-version: 'latest' 
         cache: 'npm'
-    - name: Install dependencies
+    - name: List contents of track-tuner
       run: |
         cd track-tuner
+        ls -la
+    - name: Install dependencies
+      run: |
+        cd track-tuner 
         npm install
     - name: Start application
       run: |
-        cd track-tuner
+        cd track-tuner  
         npm start
+   
