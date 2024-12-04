@@ -1,4 +1,6 @@
-import clientId from "./secrets.js"
+// import clientId from "./secrets.js"
+
+const clientId = process.env.REACT_APP_SPOTIFY_API_KEY;
 
 const redirectUri = encodeURIComponent("http://localhost:3000/")
 const scopes = encodeURIComponent("user-read-private user-read-email playlist-modify-public playlist-modify-private")
