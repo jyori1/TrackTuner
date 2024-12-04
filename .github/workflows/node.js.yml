@@ -11,22 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v4  
+
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18' 
-        cache: 'npm'
-    - name: List contents of track-tuner
-      run: |
-        cd track-tuner
-        ls -la
+        node-version: '18'  
+        cache: 'npm' 
+
     - name: Install dependencies
-      run: |
-        cd track-tuner 
-        npm install
+      run: npm install
+      working-directory: TrackTuner/track-tuner  
     - name: Start application
-      run: |
-        cd track-tuner  
-        npm start
-   
+      run: npm start
+      working-directory: TrackTuner/track-tuner  
