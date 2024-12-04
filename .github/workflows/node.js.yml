@@ -12,6 +12,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4  
+      
     - name: List directory structure
       run: ls -R
 
@@ -20,7 +21,6 @@ jobs:
       with:
         node-version: '16.x'  
         cache: 'npm'  
-      working-directory: TrackTuner/track-tuner
 
     - name: Install dependencies
       run: npm install
