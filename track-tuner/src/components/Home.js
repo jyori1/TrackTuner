@@ -1,5 +1,5 @@
 import React from 'react'
-import Spotify from "../Spotify.js";
+// import Spotify from "../Spotify.js";
 import Playlists from './Playlists.js';
 
 const Home = () => {

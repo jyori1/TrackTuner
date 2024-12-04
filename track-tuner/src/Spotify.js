@@ -1,7 +1,7 @@
 import clientId from "./secrets.js"
 
 const redirectUri = encodeURIComponent("http://localhost:3000/")
-const scopes = encodeURIComponent("user-read-private user-read-email playlist-modify-public playlist-modify-private")
+const scopes = encodeURIComponent("user-read-private user-read-email playlist-modify-public user-top-read playlist-modify-private")
 let accessToken
 const Spotify = {
     getAccessToken: () => {
@@ -75,20 +75,88 @@ const Spotify = {
         if (accessToken) {
             const headers = { Authorization: `Bearer ${accessToken}` };
             try {
-                // First, get the user ID
                 const userId = await Spotify.getUserId();
                 if (!userId) {
                     throw new Error("User ID not found.");
                 }
 
-                // Fetch the playlists for the user
                 const response = await fetch(`https://api.spotify.com/v1/users/${userId.user_id}/playlists`, { headers });
                 const data = await response.json();
 
-                // Return the playlist data
                 return data.items || [];
             } catch (error) {
                 console.error("Error fetching playlists:", error);
+                return [];
+            }
+        }
+    },
+    getPlaylist: async (playlistId) => {
+        accessToken = Spotify.getAccessToken();
+        if (accessToken) {
+            const headers = { Authorization: `Bearer ${accessToken}` };
+            try {
+                const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, { headers });
+                const data = await response.json();
+
+                return data;
+            } catch (error) {
+                console.error("Error fetching playlist details:", error);
+            }
+        }
+    },
+    deleteFromPlaylist: async (playlistId, trackId) => {
+        accessToken = Spotify.getAccessToken();
+        if (accessToken) {
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+            };
+            try {
+                const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+                    method: "DELETE",
+                    headers,
+                    body: JSON.stringify({ tracks: [{ uri: `spotify:track:${trackId}` }] }),
+                });
+                const data = await response.json();
+
+                return data;
+            } catch (error) {
+                console.error("Error deleting track from playlist:", error);
+            }
+        }
+    },
+    addToPlaylist: async (playlistId, trackUri) => {
+        accessToken = Spotify.getAccessToken();
+        if (accessToken) {
+            const headers = {
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+            };
+            try {
+                const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify({ uris: [trackUri] }),
+                });
+                const data = await response.json();
+
+                return data;
+            } catch (error) {
+                console.error("Error adding track to playlist:", error);
+            }
+        }
+    },
+    getTopSongs: async () => {
+        accessToken = Spotify.getAccessToken();
+        if (accessToken) {
+            const headers = { Authorization: `Bearer ${accessToken}` };
+            try {
+                const response = await fetch("https://api.spotify.com/v1/me/top/tracks", { headers });
+                const data = await response.json();
+
+                return data.items || [];
+            } catch (error) {
+                console.error("Error fetching top songs:", error);
                 return [];
             }
         }
