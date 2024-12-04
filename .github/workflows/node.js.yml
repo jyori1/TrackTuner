@@ -30,6 +30,6 @@ jobs:
     - name: Set environment variables
       run: echo "REACT_APP_SPOTIFY_API_KEY=${{ secrets.REACT_APP_SPOTIFY_API_KEY }}" >> $GITHUB_ENV
 
-    - name: Start application
-      run: npm start
+    - name: Build application
+      run: npm run build
       working-directory: track-tuner  
