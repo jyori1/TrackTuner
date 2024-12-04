@@ -27,6 +27,9 @@ jobs:
       run: npm install
       working-directory: track-tuner 
 
+    - name: Set environment variables
+        run: echo "REACT_APP_SPOTIFY_API_KEY=${{ secrets.REACT_APP_SPOTIFY_API_KEY }}" >> $GITHUB_ENV
+
     - name: Start application
       run: npm start
       working-directory: track-tuner  
