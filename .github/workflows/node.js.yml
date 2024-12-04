@@ -21,6 +21,7 @@ jobs:
       with:
         node-version: '16.x'  
         cache: 'npm'  
+      working-directory: track-tuner  
 
     - name: Install dependencies
       run: npm install
