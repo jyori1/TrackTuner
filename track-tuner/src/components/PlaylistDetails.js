@@ -10,28 +10,53 @@ import {
     IconButton,
     Typography,
     Box,
+    Snackbar,
+    Alert,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Recommendations from "./Recommendations.js";
 
 const PlaylistDetails = () => {
     const { playlistId } = useParams();
     const [playlist, setPlaylist] = useState(null);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+
+    const fetchPlaylist = async () => {
+        try {
+            const data = await Spotify.getPlaylist(playlistId);
+            setPlaylist(data);
+        } catch (error) {
+            console.error("Error fetching playlist details:", error);
+        }
+    };
 
     useEffect(() => {
-        const fetchPlaylist = async () => {
-            try {
-                const data = await Spotify.getPlaylist(playlistId);
-                setPlaylist(data);
-            } catch (error) {
-                console.error("Error fetching playlist details:", error);
-            }
-        };
-
         fetchPlaylist();
     }, [playlistId]);
 
+    const refreshPlaylist = () => {
+        fetchPlaylist(); // Refresh the playlist data
+    };
+
     const handleDelete = (trackId) => {
-        console.log(`Track with ID ${trackId} deleted.`);
+        try {
+            Spotify.deleteFromPlaylist(playlistId, trackId);
+            setPlaylist((prev) => {
+                const newTracks = prev.tracks.items.filter(
+                    (item) => item.track.id !== trackId
+                );
+                return { ...prev, tracks: { items: newTracks } };
+            });
+            setSnackbarMessage("Track removed from playlist.");
+            setSnackbarOpen(true);
+        } catch (error) {
+            console.error("Error deleting track from playlist:", error);
+        }
+    };
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
     };
 
     return (
@@ -106,6 +131,23 @@ const PlaylistDetails = () => {
             ) : (
                 <Typography variant="body1">Loading...</Typography>
             )}
+            <Recommendations
+                playlistId={playlistId}
+                onTrackAdded={() => {
+                    refreshPlaylist();
+                    setSnackbarMessage("Track added to playlist.");
+                    setSnackbarOpen(true);
+                }}
+            />
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={3000}
+                onClose={handleSnackbarClose}
+            >
+                <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: "100%" }}>
+                    {snackbarMessage}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };
