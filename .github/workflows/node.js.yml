@@ -11,22 +11,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4  # Step to check out the code
+    - uses: actions/checkout@v4  
     - name: List directory structure
       run: ls -R
 
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '16.x'  # Specify a stable version
-        cache: 'npm'  # Cache npm dependencies
-      env:
-        ACTIONS_STEP_DEBUG: true
+        node-version: '16.x'  
+        cache: 'npm'  
+      working-directory: TrackTuner/track-tuner
 
     - name: Install dependencies
       run: npm install
-      working-directory: TrackTuner/track-tuner  # Change working directory to where package.json is located
+      working-directory: TrackTuner/track-tuner  
 
     - name: Start application
       run: npm start
-      working-directory: TrackTuner/track-tuner  # Change working directory to where the project is
+      working-directory: TrackTuner/track-tuner  
