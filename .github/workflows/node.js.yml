@@ -17,5 +17,11 @@ jobs:
       with:
         node-version: 'latest' 
         cache: 'npm'
-    - run: npm install
-    - run: npm start
+    - name: Install dependencies
+      run: |
+        cd track-tuner
+        npm install
+    - name: Start application
+      run: |
+        cd track-tuner
+        npm start
