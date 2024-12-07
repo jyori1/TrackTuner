@@ -1,29 +1,29 @@
-# Use an official Node.js image
-FROM node:20
+# Stage 1: Build the React application
+FROM node:20 as build
 
 ARG REACT_APP_SPOTIFY_API_KEY
 ENV REACT_APP_SPOTIFY_API_KEY=$REACT_APP_SPOTIFY_API_KEY
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Copy dependencies
+# Copy package.json and package-lock.json first to leverage Docker cache
 COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the application
-COPY . .
+COPY . ./
 
-# Build the React app
+# Build the application
 RUN npm run build
 
-# Use NGINX to serve the app
+# Stage 2: Serve the application using NGINX
 FROM nginx:stable-alpine
 
-# Copy the built React app to NGINX
-COPY --from=0 /app/build /usr/share/nginx/html
+# Copy the build output to the NGINX directory
+COPY --from=build /app/build /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
