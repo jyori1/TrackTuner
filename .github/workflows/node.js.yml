@@ -23,7 +23,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '16.x'  
+        node-version: '20.x'  
         cache: 'npm'
         cache-dependency-path: '**/package-lock.json'
         
@@ -39,4 +39,17 @@ jobs:
 
     - name: Build application
       run: npm run build
-      working-directory: track-tuner  
+      working-directory: track-tuner 
+
+    - name: Log in to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build and push Docker image to ECR
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: track-tuner/Dockerfile
+        push: true
+        tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/track-tuner:latest
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        build-args: REACT_APP_SPOTIFY_API_KEY=${{ secrets.REACT_APP_SPOTIFY_API_KEY }}
