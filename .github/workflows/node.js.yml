@@ -2,9 +2,13 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - "main"
+      - "dockerfile"
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - "main"
+      - "dockerfile"
 
 jobs:
   build:
