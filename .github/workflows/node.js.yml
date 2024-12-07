@@ -51,8 +51,8 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v4
       with:
-        context: .
-        file: track-tuner/Dockerfile
+        context: ./track-tuner
+        file: Dockerfile
         push: true
         tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/track-tuner:latest
         build-args: |
