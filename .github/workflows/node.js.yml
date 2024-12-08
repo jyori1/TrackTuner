@@ -2,9 +2,14 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - 'main'
+      - "elastic-beanstalk"
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - 'main'
+      - "elastic-beanstalk"
+
 
 jobs:
   build:
@@ -53,3 +58,13 @@ jobs:
         tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/track-tuner:latest
         build-args: |
           REACT_APP_SPOTIFY_API_KEY=${{ secrets.REACT_APP_SPOTIFY_API_KEY }}
+
+    - name: Deploy to Elastic Beanstalk
+      uses: einaregilsson/beanstalk-deploy@v22
+      with:
+        application_name: TrackTunerApp
+        environment_name: TrackTuner-env-env
+        region: ${{ secrets.AWS_REGION }}
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        deployment_package: ./Dockerrun.aws.json
