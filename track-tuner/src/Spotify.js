@@ -1,8 +1,5 @@
-// import clientId from "./secrets.js"
-
 const clientId = process.env.REACT_APP_SPOTIFY_API_KEY;
-
-const redirectUri = encodeURIComponent("http://localhost:3000/")
+const redirectUri = encodeURIComponent("http://localhost:8080/")
 const scopes = encodeURIComponent("user-read-private user-read-email playlist-modify-public user-top-read playlist-modify-private")
 let accessToken
 const Spotify = {
