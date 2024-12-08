@@ -62,8 +62,9 @@ jobs:
     - name: Deploy to Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v22
       with:
-        application_name: TrackTunerApp
+        application_name: TrackTuner-env
         environment_name: TrackTuner-env-env
+        version_label: ${{ github.sha }}
         region: ${{ secrets.AWS_REGION }}
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
