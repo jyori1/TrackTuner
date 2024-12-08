@@ -10,13 +10,12 @@ on:
       - 'main'
       - "elastic-beanstalk"
 
-
 jobs:
-  build:
+  build-nodejs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4  
+    - uses: actions/checkout@v4
       
     - name: List directory structure
       run: ls -R
@@ -27,7 +26,7 @@ jobs:
         node-version: '20.x'  
         cache: 'npm'
         cache-dependency-path: '**/package-lock.json'
-        
+
     - name: Set CI to false
       run: echo "CI=false" >> $GITHUB_ENV
 
@@ -42,6 +41,13 @@ jobs:
       run: npm run build
       working-directory: track-tuner 
 
+  build-and-push-docker:
+    needs: build-nodejs
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      
     - name: Log in to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v1
       env:
@@ -58,6 +64,13 @@ jobs:
         tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/track-tuner:latest
         build-args: |
           REACT_APP_SPOTIFY_API_KEY=${{ secrets.REACT_APP_SPOTIFY_API_KEY }}
+
+  deploy-to-eb:
+    needs: build-and-push-docker
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
 
     - name: Deploy to Elastic Beanstalk
       uses: einaregilsson/beanstalk-deploy@v22
