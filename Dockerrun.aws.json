@@ -1,7 +1,7 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/track-tuner:latest",
+    "Name": "120569630589.dkr.ecr.us-east-2.amazonaws.com/track-tuner:latest",
     "Update": "true"
   },
   "Ports": [
