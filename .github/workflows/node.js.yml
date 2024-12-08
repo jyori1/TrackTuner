@@ -64,3 +64,12 @@ jobs:
         tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/track-tuner:latest
         build-args: |
           REACT_APP_SPOTIFY_API_KEY=${{ secrets.REACT_APP_SPOTIFY_API_KEY }}
+
+  deploy-elastic-beanstalk:
+    - name: Restart Elastic Beanstalk App Server
+      run: |
+        aws elasticbeanstalk restart-app-server --environment-name TrackTuner-env-env
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
