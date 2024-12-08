@@ -66,6 +66,12 @@ jobs:
           REACT_APP_SPOTIFY_API_KEY=${{ secrets.REACT_APP_SPOTIFY_API_KEY }}
 
   deploy-elastic-beanstalk:
+    needs: build-and-push-docker
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
     - name: Restart Elastic Beanstalk App Server
       run: |
         aws elasticbeanstalk restart-app-server --environment-name TrackTuner-env-env
